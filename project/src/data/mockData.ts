@@ -1,0 +1,178 @@
+import { Hub, Meeting, ChatbotHistory, HubMember } from '../types';
+
+export const mockHubsData: Hub[] = [
+  {
+    id: 'hub_1',
+    name: 'TechCorp Solutions',
+    type: 'corporate',
+    creator: '1',
+    createdAt: '2024-01-15T10:00:00Z',
+    members: [
+      {
+        userId: '1',
+        name: 'John CEO',
+        email: 'ceo@company.com',
+        role: 'CEO',
+        joinedAt: '2024-01-15T10:00:00Z',
+        avatar: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+      },
+      {
+        userId: '2',
+        name: 'Sarah Manager',
+        email: 'sarah.manager@company.com',
+        role: 'Manager',
+        joinedAt: '2024-01-16T09:00:00Z',
+        avatar: 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+      },
+      {
+        userId: '3',
+        name: 'Mike Manager',
+        email: 'mike.manager@company.com',
+        role: 'Manager',
+        joinedAt: '2024-01-16T09:00:00Z',
+        avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+      },
+      {
+        userId: '4',
+        name: 'Lisa HR',
+        email: 'lisa.hr@company.com',
+        role: 'HR',
+        joinedAt: '2024-01-17T08:30:00Z',
+        avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+      },
+      {
+        userId: '5',
+        name: 'David Employee',
+        email: 'david@company.com',
+        role: 'Employee',
+        joinedAt: '2024-01-17T08:30:00Z',
+        avatar: 'https://images.pexels.com/photos/697509/pexels-photo-697509.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+      },
+      {
+        userId: '6',
+        name: 'Emma Employee',
+        email: 'emma@company.com',
+        role: 'Employee',
+        joinedAt: '2024-01-18T08:30:00Z',
+        avatar: 'https://images.pexels.com/photos/712513/pexels-photo-712513.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+      },
+      {
+        userId: '7',
+        name: 'Tom Employee',
+        email: 'tom@company.com',
+        role: 'Employee',
+        joinedAt: '2024-01-19T08:30:00Z',
+        avatar: 'https://images.pexels.com/photos/1043473/pexels-photo-1043473.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+      },
+      {
+        userId: '8',
+        name: 'Alice Employee',
+        email: 'alice@company.com',
+        role: 'Employee',
+        joinedAt: '2024-01-20T08:30:00Z',
+        avatar: 'https://images.pexels.com/photos/1181424/pexels-photo-1181424.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+      },
+    ],
+    teams: [],
+    channels: [
+      {
+        id: 'channel_1',
+        name: 'All Members',
+        type: 'all-members',
+        messages: [
+          {
+            id: 'msg_1',
+            userId: '1',
+            userName: 'John CEO',
+            content: 'Welcome to TechCorp Solutions! Looking forward to working with everyone.',
+            timestamp: '2024-01-15T10:30:00Z',
+            avatar: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+          },
+          {
+            id: 'msg_2',
+            userId: '2',
+            userName: 'Sarah Manager',
+            content: 'Excited to be part of this team! Let\'s build something amazing together.',
+            timestamp: '2024-01-16T09:15:00Z',
+            avatar: 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+          },
+        ],
+      },
+    ],
+  },
+];
+
+export const mockMeetingsData: Meeting[] = [
+  {
+    id: 'meeting_1',
+    title: 'Q1 Planning Meeting',
+    hubId: 'hub_1',
+    agenda: [
+      'Review Q4 performance',
+      'Set Q1 objectives',
+      'Resource allocation',
+      'Timeline planning',
+    ],
+    participants: ['1', '2', '3'],
+    createdBy: '1',
+    scheduledFor: '2024-01-25T15:00:00Z',
+    duration: 90,
+    jitsiLink: 'https://meet.jit.si/AIMeetingBuddyQ1Planning',
+    status: 'scheduled',
+    joinLogs: [],
+  },
+  {
+    id: 'meeting_2',
+    title: 'Engineering Sprint Review',
+    hubId: 'hub_1',
+    agenda: [
+      'Sprint retrospective',
+      'Demo completed features',
+      'Identify blockers',
+      'Plan next sprint',
+    ],
+    participants: ['2', '3'],
+    createdBy: '2',
+    scheduledFor: '2024-01-22T10:00:00Z',
+    duration: 60,
+    jitsiLink: 'https://meet.jit.si/AIMeetingBuddySprintReview',
+    status: 'completed',
+    joinLogs: [
+      {
+        userId: '2',
+        userName: 'Sarah Manager',
+        action: 'join',
+        timestamp: '2024-01-22T10:00:00Z',
+      },
+      {
+        userId: '3',
+        userName: 'John Doe',
+        action: 'join',
+        timestamp: '2024-01-22T10:02:00Z',
+      },
+    ],
+    summary: 'Successful sprint review. All planned features completed on time. Next sprint will focus on performance optimization.',
+  },
+];
+
+export const mockChatbotHistory: ChatbotHistory[] = [
+  {
+    id: 'chat_1',
+    hubId: 'hub_1',
+    type: 'meeting_summary',
+    title: 'Engineering Sprint Review Summary',
+    query: 'Summarize the engineering sprint review meeting',
+    response: 'The engineering sprint review was highly productive. Key highlights:\n\n• All planned features for the sprint were completed successfully\n• Demo showcased the new user dashboard and improved API performance\n• No major blockers identified\n• Next sprint will focus on performance optimization and mobile responsiveness\n• Team velocity is on track with project timeline\n\nOverall, the engineering team is performing excellently and meeting all deliverables.',
+    timestamp: '2024-01-22T11:30:00Z',
+    meetingId: 'meeting_2',
+  },
+  {
+    id: 'chat_2',
+    hubId: 'hub_1',
+    type: 'team_question',
+    title: 'Team Communication Guidelines',
+    query: 'What are the best practices for team communication in our organization?',
+    response: 'Here are the recommended team communication best practices for TechCorp Solutions:\n\n• Use team channels for project-specific discussions\n• All-members channel for company-wide announcements\n• Schedule regular check-ins and stand-ups\n• Document important decisions in meeting notes\n• Use @mentions for urgent matters\n• Keep messages clear and actionable\n• Respect time zones for async communication\n\nThese practices help maintain transparency and ensure everyone stays aligned on goals and progress.',
+    timestamp: '2024-01-20T16:45:00Z',
+  },
+];
