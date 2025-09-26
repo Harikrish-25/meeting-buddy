@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Hub, Channel, ROLE_PERMISSIONS } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { useApp } from '../contexts/AppContext';
-import { Hash, Users, Calendar, Send } from 'lucide-react';
+import { Hash, Users, Calendar, Send, UserPlus, X } from 'lucide-react';
 import clsx from 'clsx';
 import CreateMeetingModal from './CreateMeetingModal';
+import AddMemberModal from './AddMemberModal';
+import MembersList from './MembersList';
 import { Modal } from './Modal';
+import { apiClient } from '../services/api';
 
 interface HubViewProps {
   hub: Hub;
@@ -18,6 +21,9 @@ const HubView: React.FC<HubViewProps> = ({ hub }) => {
   const [showCreateMeeting, setShowCreateMeeting] = useState(false);
   const [messageInput, setMessageInput] = useState('');
   const [showCreateTeam, setShowCreateTeam] = useState(false);
+  const [showAddMember, setShowAddMember] = useState(false);
+  const [members, setMembers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   const [teamForm, setTeamForm] = useState({
     name: '',
     department: '',
@@ -25,6 +31,39 @@ const HubView: React.FC<HubViewProps> = ({ hub }) => {
     assistant: '',
     members: [] as string[],
   });
+
+  // Get user's role in this hub - assuming the creator is CEO
+  const getUserRole = () => {
+    if (hub.creator === user?.id) {
+      return 'CEO';
+    }
+    // Check if user is in hub members with a specific role
+    const memberRole = hub.members.find(m => m.userId === user?.id)?.role;
+    return memberRole || 'Employee';
+  };
+
+  const userRole = getUserRole();
+
+  // Function to handle adding members
+  const handleAddMember = async (email: string, role: string) => {
+    try {
+      setLoading(true);
+      // Call the backend API to add member
+      await apiClient.addHubMember(hub.id, email, role);
+      
+      // Show success message
+      alert(`Member ${email} has been added with role ${role}!`);
+      
+      // TODO: Refresh the hub data to show the new member
+      // In a real app, you might want to refetch the hub data or update state
+      
+    } catch (error: any) {
+      console.error('Failed to add member:', error);
+      throw new Error(`Failed to add member: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Get all managers and employees not already assigned as leader/assistant/member in any team
   const assignedUserIds = new Set(hub.teams.flatMap(t => [t.leader, t.assistant, ...t.members].filter(Boolean)));
@@ -89,6 +128,15 @@ const HubView: React.FC<HubViewProps> = ({ hub }) => {
               >
                 <Calendar className="w-4 h-4" />
                 <span>Meeting</span>
+              </button>
+            )}
+            {(userRole === 'CEO' || userRole === 'Manager') && (
+              <button
+                onClick={() => setShowAddMember(true)}
+                className="flex items-center space-x-1 text-green-600 hover:text-green-700"
+              >
+                <UserPlus className="w-4 h-4" />
+                <span>Add Member</span>
               </button>
             )}
           </div>
@@ -387,6 +435,45 @@ const HubView: React.FC<HubViewProps> = ({ hub }) => {
           onClose={() => setShowCreateMeeting(false)}
           hub={hub}
         />
+      )}
+
+      {/* Add Member Modal */}
+      {showAddMember && (
+        <AddMemberModal
+          isOpen={showAddMember}
+          onClose={() => setShowAddMember(false)}
+          onAddMember={handleAddMember}
+          hubId={hub.id}
+          userRole={userRole}
+        />
+      )}
+
+      {/* Members List Modal */}
+      {showMembersList && (
+        <Modal onClose={() => setShowMembersList(false)}>
+          <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold text-black">Hub Members</h2>
+              <button 
+                onClick={() => setShowMembersList(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <MembersList 
+              members={hub.members.map(m => ({
+                id: m.userId,
+                user_id: m.userId,
+                name: m.name,
+                email: m.email,
+                role: m.role,
+                joined_at: m.joinedAt
+              }))} 
+              currentUserRole={userRole} 
+            />
+          </div>
+        </Modal>
       )}
     </div>
   );

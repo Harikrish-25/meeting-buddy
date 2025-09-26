@@ -127,6 +127,31 @@ class ApiClient {
   async getHubMeetings(hubId: string) {
     return this.request<any[]>(`/hubs/${hubId}/meetings`);
   }
+
+  // Organization/Hub Member Management
+  async addHubMember(hubId: string, email: string, role: string) {
+    return this.request<any>(`/api/organizations/${hubId}/members`, {
+      method: 'POST',
+      body: JSON.stringify({ email, role }),
+    });
+  }
+
+  async getHubMembers(hubId: string) {
+    return this.request<any[]>(`/api/organizations/${hubId}/members`);
+  }
+
+  async removeHubMember(hubId: string, memberId: string) {
+    return this.request<any>(`/api/organizations/${hubId}/members/${memberId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async updateMemberRole(hubId: string, memberId: string, role: string) {
+    return this.request<any>(`/api/organizations/${hubId}/members/${memberId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ role }),
+    });
+  }
 }
 
 export const apiClient = new ApiClient();

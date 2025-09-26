@@ -78,20 +78,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           dispatch({
             type: 'LOAD_DATA',
             payload: {
-              hubs: mockHubsData,
-              meetings: mockMeetingsData,
-              chatbotHistory: mockChatbotHistory,
+              hubs: [],
+              meetings: [],
+              chatbotHistory: [],
             },
           });
         }
       } else {
-        // Load mock data for new users
+        // Load empty data for new users
         dispatch({
           type: 'LOAD_DATA',
           payload: {
-            hubs: mockHubsData,
-            meetings: mockMeetingsData,
-            chatbotHistory: mockChatbotHistory,
+            hubs: [],
+            meetings: [],
+            chatbotHistory: [],
           },
         });
       }
