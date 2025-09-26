@@ -1,5 +1,13 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { AuthState, User } from '../types';
+import { User } from '../types';
+import { apiClient } from '../services/api';
+
+interface AuthState {
+  user: User | null;
+  token: string | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+}
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<boolean>;
@@ -12,7 +20,8 @@ const AuthContext = createContext<AuthContextType | null>(null);
 type AuthAction =
   | { type: 'LOGIN_SUCCESS'; payload: { user: User; token: string } }
   | { type: 'LOGOUT' }
-  | { type: 'RESTORE_SESSION'; payload: { user: User; token: string } };
+  | { type: 'RESTORE_SESSION'; payload: { user: User; token: string } }
+  | { type: 'SET_LOADING'; payload: boolean };
 
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
@@ -22,12 +31,19 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         user: action.payload.user,
         token: action.payload.token,
         isAuthenticated: true,
+        isLoading: false,
       };
     case 'LOGOUT':
       return {
         user: null,
         token: null,
         isAuthenticated: false,
+        isLoading: false,
+      };
+    case 'SET_LOADING':
+      return {
+        ...state,
+        isLoading: action.payload,
       };
     default:
       return state;
@@ -38,6 +54,7 @@ const initialState: AuthState = {
   user: null,
   token: null,
   isAuthenticated: false,
+  isLoading: true,
 };
 
 // Mock users database

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { Hub, Meeting, ChatbotHistory } from '../types';
 import { useAuth } from './AuthContext';
-import { mockHubsData, mockMeetingsData, mockChatbotHistory } from '../data/mockData';
+import { apiClient } from '../services/api';
 
 interface AppState {
   hubs: Hub[];
